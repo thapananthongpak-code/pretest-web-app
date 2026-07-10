@@ -1,6 +1,5 @@
 import express from "express";
 import path from "path";
-import { createServer as createViteServer } from "vite";
 
 interface ScoreSubmission {
   fullName: string;
@@ -72,8 +71,7 @@ const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyF7b1fhBHXTDQ2
 const app = express();
 app.use(express.json());
 
-async function startServer() {
-  const PORT = 3000;
+const PORT = 3000;
 
   // API: Save Score / Login / Logout
   app.post("/api/submit", async (req, res) => {
@@ -205,27 +203,29 @@ async function startServer() {
   });
 
   // Serve Vite or static files
-  if (process.env.NODE_ENV !== "production") {
-    const vite = await createViteServer({
-      server: { middlewareMode: true },
-      appType: "spa",
-    });
-    app.use(vite.middlewares);
-  } else {
-    const distPath = path.join(process.cwd(), "dist");
-    app.use(express.static(distPath));
-    app.get("*", (req, res) => {
-      res.sendFile(path.join(distPath, "index.html"));
-    });
+  async function setupFrontend() {
+    if (process.env.NODE_ENV !== "production") {
+      const { createServer: createViteServer } = await import("vite");
+      const vite = await createViteServer({
+        server: { middlewareMode: true },
+        appType: "spa",
+      });
+      app.use(vite.middlewares);
+    } else {
+      const distPath = path.join(process.cwd(), "dist");
+      app.use(express.static(distPath));
+      app.get("*", (req, res) => {
+        res.sendFile(path.join(distPath, "index.html"));
+      });
+    }
   }
 
   if (!process.env.VERCEL) {
-    app.listen(PORT, "0.0.0.0", () => {
-      console.log(`Server running on http://0.0.0.0:${PORT}`);
+    setupFrontend().then(() => {
+      app.listen(PORT, "0.0.0.0", () => {
+        console.log(`Server running on http://0.0.0.0:${PORT}`);
+      });
     });
   }
-}
-
-startServer();
 
 export default app;

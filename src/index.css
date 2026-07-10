@@ -1,0 +1,106 @@
+@import url('https://fonts.googleapis.com/css2?family=Sarabun:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Sarabun", "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Space Grotesk", sans-serif;
+}
+
+/* Custom Cloud drift animations */
+@keyframes cloud-drift-slow {
+  0% { transform: translateX(-200px); }
+  100% { transform: translateX(100vw); }
+}
+
+@keyframes cloud-drift-medium {
+  0% { transform: translateX(-300px); }
+  100% { transform: translateX(100vw); }
+}
+
+@keyframes cloud-drift-fast {
+  0% { transform: translateX(-150px); }
+  100% { transform: translateX(100vw); }
+}
+
+/* Floating content animation */
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0px); }
+}
+
+/* Glass shine sweep effect */
+@keyframes shine-effect {
+  0% {
+    left: -150%;
+  }
+  30% {
+    left: 150%;
+  }
+  100% {
+    left: 150%;
+  }
+}
+
+.animate-cloud-slow {
+  animation: cloud-drift-slow 60s linear infinite;
+}
+
+.animate-cloud-medium {
+  animation: cloud-drift-medium 45s linear infinite;
+}
+
+.animate-cloud-fast {
+  animation: cloud-drift-fast 30s linear infinite;
+}
+
+.animate-float {
+  animation: float 4s ease-in-out infinite;
+}
+
+/* Glassmorphism glass card */
+.glass-card {
+  background: rgba(255, 255, 255, 0.45);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+/* Glass shine pseudo class */
+.glass-shine {
+  position: relative;
+  overflow: hidden;
+}
+
+.glass-shine::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -150%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.6) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  transform: skewX(-25deg);
+  animation: shine-effect 5s ease-in-out infinite;
+}
+
+/* Custom Scrollbar for Sidenav & Content */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.15);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.25);
+}

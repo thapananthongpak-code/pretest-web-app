@@ -1,8 +1,15 @@
 import express from "express";
 import path from "path";
-import app from "./server-api";
+import submitHandler from "./api/submit.js";
+import leaderboardHandler from "./api/leaderboard.js";
 
 const PORT = 3000;
+const app = express();
+app.use(express.json());
+
+// API routes
+app.post("/api/submit", submitHandler);
+app.get("/api/leaderboard", leaderboardHandler);
 
 // Serve Vite or static files
 async function setupFrontend() {
